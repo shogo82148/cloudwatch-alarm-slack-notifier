@@ -47,7 +47,7 @@ def message_handler(region, message):
                 "ts": change_time.timestamp(),
             },
         ],
-        "username": "AWS Alerm - {}".format(new_state),
+        "username": "AWS Alarm - {}".format(new_state),
         "icon_emoji": ":white_check_mark:" if new_state == "OK" else ":no_entry_sign:",
     }
     
