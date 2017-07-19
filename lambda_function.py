@@ -16,7 +16,6 @@ def message_handler(region, message):
     new_state = message["NewStateValue"]
     text = "{}: {} -> {}".format(message["AlarmName"], old_state, new_state)
     link = "https://console.aws.amazon.com/cloudwatch/home?region={}#s=Alarms&alarm={}".format(region, message["AlarmName"])
-    change_time = datetime.strptime(message["StateChangeTime"], "%Y-%m-%dT%H:%M:%S.%f%z")
     values = {
         "attachments": [
             {
@@ -44,7 +43,6 @@ def message_handler(region, message):
                         "value": message["Trigger"]["Namespace"],
                     },
                 ],
-                "ts": change_time.timestamp(),
             },
         ],
         "username": "AWS Alarm - {}".format(new_state),
