@@ -51,7 +51,7 @@ def message_handler(region, message):
     
     url = os.environ["SLACK_INCOMING_WEBHOOK"]
     req = urllib.request.Request(url)
-    req.add_header('Content-Type', 'application/application/json')
+    req.add_header('Content-Type', 'application/json')
     content = json.dumps(values, ensure_ascii=False).encode("utf-8")
     res = urllib.request.urlopen(req, data=content).read()
     logger.info(res)
