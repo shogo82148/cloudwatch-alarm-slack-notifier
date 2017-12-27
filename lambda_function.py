@@ -5,17 +5,21 @@ CloudWatch Alarm Slack Notifier.
 import json
 import urllib.request
 import os
-from datetime import datetime
 
 import logging
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
 
 def message_handler(region, message):
+    """
+    message_handler handles AWS SNS Message.
+    """
     old_state = message["OldStateValue"]
     new_state = message["NewStateValue"]
     text = "{}: {} -> {}".format(message["AlarmName"], old_state, new_state)
-    link = "https://console.aws.amazon.com/cloudwatch/home?region={}#s=Alarms&alarm={}".format(region, message["AlarmName"])
+    link = "https://console.aws.amazon.com/cloudwatch/home?region={}#s=Alarms&alarm={}".format(
+        region, message["AlarmName"]
+    )
     values = {
         "attachments": [
             {
@@ -48,7 +52,7 @@ def message_handler(region, message):
         "username": "AWS Alarm - {}".format(new_state),
         "icon_emoji": ":white_check_mark:" if new_state == "OK" else ":no_entry_sign:",
     }
-    
+
     url = os.environ["SLACK_INCOMING_WEBHOOK"]
     req = urllib.request.Request(url)
     req.add_header('Content-Type', 'application/json')
@@ -57,6 +61,9 @@ def message_handler(region, message):
     logger.info(res)
 
 def lambda_handler(event, context):
+    """
+    lambda_handler provides AWS Lambda function.
+    """
     for record in event["Records"]:
         arn = record["Sns"]["TopicArn"].split(":")
         message = json.loads(record["Sns"]["Message"])
